@@ -7,7 +7,7 @@ class CannonBall {
       isStatic: true
     };
     this.r = 40;
-
+    this.speed=0.05
     this.body = Bodies.circle(x, y, this.r, options);
 
     this.image = loadImage("./assets/cannonball.png");
@@ -16,12 +16,9 @@ class CannonBall {
     this.trajectory = [];
     World.add(world, this.body);
   }
-
-  shoot() {
-    var velocity = p5.Vector.fromAngle(cannon.angle);
-    velocity.mult(20);
-    Matter.Body.setStatic(this.body, false);
-    Matter.Body.setVelocity(this.body, { x: velocity.x, y: velocity.y });
+  
+  animate(){
+    this.speed+=0.05%1.1;
   }
 
   remove(index){
@@ -37,9 +34,18 @@ class CannonBall {
 
 
   }
-animate(){
-  this.speed+=0.05%1.1;
-}
+
+
+  shoot() {
+    var newangle=cannon.angle-0.5;
+    var velocity = p5.Vector.fromAngle(cannon.angle);
+    velocity.mult(20);
+    Matter.Body.setStatic(this.body, false);
+    Matter.Body.setVelocity(this.body, { x: velocity.x, y: velocity.y });
+
+  }
+
+  
   display() {
     var angle = this.body.angle;
     var pos = this.body.position;
@@ -53,7 +59,7 @@ animate(){
     
     pop();
 
-    if (this.body.velocity.x > 0 && this.body.position.x > 300) {
+    if (this.body.velocity.x > 0 && this.body.position.x > 300 && !this.isSink); {
       var position = [this.body.position.x, this.body.position.y];
       this.trajectory.push(position);
     }
